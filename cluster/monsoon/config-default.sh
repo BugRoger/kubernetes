@@ -1,0 +1,34 @@
+TIER=marian
+REGION=eu-de-1
+DOMAIN=mo.sap.corp
+
+KUBERNETES_VERSION=0.17.1
+IMAGE_ID=COREOS-STABLE
+
+NUM_MINIONS=${NUM_MINIONS:-1}
+MASTER_SIZE=${MASTER_SIZE:-small_1_2}
+MINION_SIZE=${MINION_SIZE:-small_1_2}
+MASTER_NAME="${TIER}.${REGION}/master"
+MINION_NAMES=($(eval echo ${TIER}.${REGION}/node{0..${NUM_MINIONS-1}}))
+
+# Volumes
+MASTER_VOLUME_ETCD_SIZE=10
+MINION_VOLUME_DOCKER_SIZE=100
+
+# Credentials
+AWS_ACCESS_KEY_ID=RDAzODcyMDo6MjQ5NjY%3D%0A
+AWS_SECRET_ACCESS_KEY=aJuSjp%2FmJ%2FmFA3RmgTRrhhIw%2FxXVB1buLzWZDKqA%2FNQ%3D%0A
+AWS_DEFAULT_REGION=europe
+AWS_ENDPOINT_URL=https://ec2-europe.api.monsoon.mo.sap.corp
+
+# Commands
+AWS_CMD="docker run -ti \
+         -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+         -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+         -e AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
+         -e AWS_ENDPOINT_URL=${AWS_ENDPOINT_URL} \
+         -v ${KUBE_TEMP}:${KUBE_TEMP} \
+         docker.mo.sap.corp/tools/aws-cli aws"
+#AWS_CMD="echo $AWS_CMD"
+
+JQ_CMD="jq"
