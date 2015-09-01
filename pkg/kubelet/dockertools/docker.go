@@ -303,7 +303,9 @@ func ConnectToDockerOrDie(dockerEndpoint string) DockerInterface {
 			VersionInfo: docker.Env{"ApiVersion=1.18"},
 		}
 	}
+
 	client, err := docker.NewClient(getDockerEndpoint(dockerEndpoint))
+
 	if err != nil {
 		glog.Fatalf("Couldn't connect to docker: %v", err)
 	}
