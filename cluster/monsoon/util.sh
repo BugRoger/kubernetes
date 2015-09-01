@@ -164,8 +164,6 @@ function start-master() {
     sleep 2
   done
   echo
-
-  create-kubeconfig
 }
 
 function start-minions() {
