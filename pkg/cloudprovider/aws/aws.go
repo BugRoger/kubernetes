@@ -567,7 +567,6 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 		endpoint:         endpoint,
 		elbClients:       map[string]ELB{},
 	}
-	panic("hi")
 
 	filterTags := map[string]string{}
 	if cfg.Global.KubernetesClusterTag != "" {
@@ -588,6 +587,7 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 		}
 	}
 
+	panic("hi")
 	awsCloud.filterTags = filterTags
 	if len(filterTags) > 0 {
 		glog.Infof("AWS cloud filtering on tags: %v", filterTags)
