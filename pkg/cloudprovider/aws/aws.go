@@ -1020,6 +1020,7 @@ func (self *awsInstance) getInfo() (*ec2.Instance, error) {
 
 	instances, err := self.ec2.DescribeInstances(request)
 	if err != nil {
+		fmt.Println("Some error: ", err)
 		return nil, err
 	}
 	if len(instances) == 0 {
