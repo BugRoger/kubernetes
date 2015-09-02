@@ -96,5 +96,7 @@ func InitCloudProvider(name string, configFilePath string) Interface {
 		glog.Fatalf("Unknown cloud provider: %s", name)
 	}
 
+	glog.Info("Initialized Cloud Provider")
+
 	return cloud
 }
