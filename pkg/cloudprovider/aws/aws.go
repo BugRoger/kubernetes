@@ -578,12 +578,14 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 			return nil, err
 		}
 
-		panic("hi")
 
 		selfInstanceInfo, err := selfInstance.getInfo()
 		if err != nil {
 			return nil, err
 		}
+
+		panic("hi")
+		
 		for _, tag := range selfInstanceInfo.Tags {
 			if orEmpty(tag.Key) == TagNameKubernetesCluster {
 				filterTags[TagNameKubernetesCluster] = orEmpty(tag.Value)
