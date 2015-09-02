@@ -1241,15 +1241,22 @@ func (s *AWSCloud) getSelfAWSInstance() (*awsInstance, error) {
 
 	i := s.selfAWSInstance
 	if i == nil {
+		fmt.Println("Instance not cached")
+
 		metadata := s.awsServices.Metadata()
 		instanceIdBytes, err := metadata.GetMetaData("instance-id")
 		if err != nil {
 			return nil, fmt.Errorf("error fetching instance-id from ec2 metadata service: %v", err)
 		}
+
+		fmt.Println("Instance from metadata service: ", instanceIdBytes)
+
 		privateDnsNameBytes, err := metadata.GetMetaData("local-hostname")
 		if err != nil {
 			return nil, fmt.Errorf("error fetching local-hostname from ec2 metadata service: %v", err)
 		}
+
+		fmt.Println("DNSName from metadata service: ", privateDnsNameBytes)
 
 		i = newAWSInstance(s.ec2, string(instanceIdBytes), string(privateDnsNameBytes))
 		s.selfAWSInstance = i
