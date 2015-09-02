@@ -99,6 +99,8 @@ func InitCloudProvider(name string, configFilePath string) Interface {
 	glog.Info("Initialized Cloud Provider")
 
 	instances, _ := cloud.Instances()
+	glog.Info("Instances: %s", instances)
+
 	nodeName, _ := instances.CurrentNodeName("mo-a8aa30478")
 	glog.Info(nodeName)
 
