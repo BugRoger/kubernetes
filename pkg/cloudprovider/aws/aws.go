@@ -524,7 +524,6 @@ func isRegionValid(region string) bool {
 // newAWSCloud creates a new instance of AWSCloud.
 // AWSProvider and instanceId are primarily for tests
 func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
-	panic("initializing")
 	metadata := awsServices.Metadata()
 	cfg, err := readAWSCloudConfig(config, metadata)
 	if err != nil {
