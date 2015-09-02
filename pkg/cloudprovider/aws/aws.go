@@ -574,6 +574,7 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 	} else {
 		selfInstance, err := awsCloud.getSelfAWSInstance()
 		if err != nil {
+			panic("Couldn't get selfAWSInstance")
 			return nil, err
 		}
 		selfInstanceInfo, err := selfInstance.getInfo()
