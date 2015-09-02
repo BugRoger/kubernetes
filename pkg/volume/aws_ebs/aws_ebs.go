@@ -160,7 +160,8 @@ func detachDiskLogError(pd *awsElasticBlockStore) {
 func (pd *awsElasticBlockStore) getVolumeProvider() (aws_cloud.Volumes, error) {
 	name := "aws"
 
-	config, err := os.Open("aws.ini")
+	configFilePath := "aws.ini"
+	config, err := os.Open(configFilePath)
 	if err != nil {
 		glog.Fatalf("Couldn't open cloud provider configuration %s: %#v",
 			configFilePath, err)
