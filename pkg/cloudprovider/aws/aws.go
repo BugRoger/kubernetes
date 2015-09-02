@@ -477,7 +477,7 @@ func readAWSCloudConfig(config io.Reader, metadata AWSMetadata) (*AWSCloudConfig
 	var cfg AWSCloudConfig
 	var err error
 
-	if config != nil {
+	if config == nil {
 		err = gcfg.ReadInto(&cfg, config)
 		if err != nil {
 			fmt.Errorf("unable to read AWS cloud provider config file: %v", err)
