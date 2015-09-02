@@ -572,10 +572,14 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 	if cfg.Global.KubernetesClusterTag != "" {
 		filterTags[TagNameKubernetesCluster] = cfg.Global.KubernetesClusterTag
 	} else {
+
 		selfInstance, err := awsCloud.getSelfAWSInstance()
 		if err != nil {
 			return nil, err
 		}
+
+		panic("hi")
+
 		selfInstanceInfo, err := selfInstance.getInfo()
 		if err != nil {
 			return nil, err
@@ -587,7 +591,6 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 		}
 	}
 
-	panic("hi")
 	awsCloud.filterTags = filterTags
 	if len(filterTags) > 0 {
 		glog.Infof("AWS cloud filtering on tags: %v", filterTags)
