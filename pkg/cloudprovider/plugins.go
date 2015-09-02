@@ -43,7 +43,7 @@ func RegisterCloudProvider(name string, cloud Factory) {
 		glog.Fatalf("Cloud provider %q was registered twice", name)
 	}
 	glog.V(1).Infof("Registered cloud provider %q", name)
-	panic("Registered cloud provider %q", name)
+	panic("Registered cloud provider")
 	providers[name] = cloud
 }
 
