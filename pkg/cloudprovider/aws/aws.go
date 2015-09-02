@@ -196,6 +196,8 @@ type awsSDKProvider struct {
 
 func (p *awsSDKProvider) Compute(regionName string, endpoint string) (EC2, error) {
 	fmt.Println("Generation new Compute provider")
+	fmt.Println("Region: ", regionName)
+	fmt.Println("Endpoint: ", endpoint)
 
 	ec2 := &awsSdkEC2{
 		ec2: ec2.New(&aws.Config{
