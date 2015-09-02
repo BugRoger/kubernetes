@@ -1066,6 +1066,7 @@ func (self *awsInstance) assignMountpoint(volumeID string) (mountpoint string, a
 			if strings.HasPrefix(mountpoint, "/dev/xvd") {
 				mountpoint = mountpoint[8:]
 			}
+			mountpoint = "b"
 			deviceMappings[mountpoint] = orEmpty(blockDevice.EBS.VolumeID)
 		}
 		self.deviceMappings = deviceMappings
