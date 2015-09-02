@@ -1237,6 +1237,8 @@ func (s *AWSCloud) getSelfAWSInstance() (*awsInstance, error) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
+	fmt.Println("Fetching selfawsinstance")
+
 	i := s.selfAWSInstance
 	if i == nil {
 		metadata := s.awsServices.Metadata()
