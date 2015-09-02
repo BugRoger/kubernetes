@@ -567,6 +567,7 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 		endpoint:         endpoint,
 		elbClients:       map[string]ELB{},
 	}
+	panic("hi")
 
 	filterTags := map[string]string{}
 	if cfg.Global.KubernetesClusterTag != "" {
@@ -574,7 +575,6 @@ func newAWSCloud(config io.Reader, awsServices AWSServices) (*AWSCloud, error) {
 	} else {
 		selfInstance, err := awsCloud.getSelfAWSInstance()
 		if err != nil {
-			panic("Couldn't get selfAWSInstance")
 			return nil, err
 		}
 		selfInstanceInfo, err := selfInstance.getInfo()
