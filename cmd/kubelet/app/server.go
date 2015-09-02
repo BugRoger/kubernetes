@@ -289,7 +289,7 @@ func (s *KubeletServer) Run(_ []string) error {
 		RootFreeDiskMB:   s.LowDiskSpaceThresholdMB,
 	}
 	glog.V(2).Infof("Trying to initialize cloud provider: %q from the config file: %q\n", s.CloudProvider, s.CloudConfigFile)
-	
+
 	cloud := cloudprovider.InitCloudProvider(s.CloudProvider, s.CloudConfigFile)
 	glog.V(2).Infof("Successfully initialized cloud provider: %q from the config file: %q\n", s.CloudProvider, s.CloudConfigFile)
 
@@ -582,12 +582,18 @@ func SimpleKubelet(client *client.Client,
 func RunKubelet(kcfg *KubeletConfig, builder KubeletBuilder) error {
 	kcfg.Hostname = nodeutil.GetHostname(kcfg.HostnameOverride)
 
+	fmt.Println("hi from RunKublet")
 	if len(kcfg.NodeName) == 0 {
 		// Query the cloud provider for our node name, default to Hostname
 		nodeName := kcfg.Hostname
 		if kcfg.Cloud != nil {
 			var err error
+
+			fmt.Println("Trying to figure out the nodeName for host:", nodeName)
+
 			instances, ok := kcfg.Cloud.Instances()
+			fmt.Println("Found the following instances: ", instances)
+
 			if !ok {
 				return fmt.Errorf("failed to get instances from cloud provider")
 			}
