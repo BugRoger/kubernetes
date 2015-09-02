@@ -477,6 +477,9 @@ func readAWSCloudConfig(config io.Reader, metadata AWSMetadata) (*AWSCloudConfig
 	var cfg AWSCloudConfig
 	var err error
 
+	fmt.Println("cfg: ", cfg)
+	fmt.Println("reader: ", config)
+
 	if config == nil {
 		err = gcfg.ReadInto(&cfg, config)
 		if err != nil {
