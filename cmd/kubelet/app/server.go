@@ -592,11 +592,11 @@ func RunKubelet(kcfg *KubeletConfig, builder KubeletBuilder) error {
 			fmt.Println("Trying to figure out the nodeName for host:", nodeName)
 
 			instances, ok := kcfg.Cloud.Instances()
-			fmt.Println("Found the following instances: ", instances)
 
 			if !ok {
 				return fmt.Errorf("failed to get instances from cloud provider")
 			}
+			fmt.Println("Found the following instances: ", instances)
 
 			nodeName, err = instances.CurrentNodeName(kcfg.Hostname)
 			if err != nil {
