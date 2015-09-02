@@ -461,7 +461,7 @@ func (s *awsSdkEC2) ModifyInstanceAttribute(request *ec2.ModifyInstanceAttribute
 }
 
 func init() {
-	panic "Boom" 
+	panic("Boom")
 	fmt.Println("Initializing AWS Cloud Provider..... \\o/")
 
 	cloudprovider.RegisterCloudProvider(ProviderName, func(config io.Reader) (cloudprovider.Interface, error) {
