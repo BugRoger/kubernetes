@@ -195,6 +195,8 @@ type awsSDKProvider struct {
 }
 
 func (p *awsSDKProvider) Compute(regionName string, endpoint string) (EC2, error) {
+	fmt.Println("Generation new Compute provider")
+
 	ec2 := &awsSdkEC2{
 		ec2: ec2.New(&aws.Config{
 			Region:      regionName,
@@ -1019,6 +1021,7 @@ func (self *awsInstance) getInfo() (*ec2.Instance, error) {
 	fmt.Println("Fethching info for ", instanceID)
 
 	instances, err := self.ec2.DescribeInstances(request)
+
 	if err != nil {
 		fmt.Println("Some error: ", err)
 		return nil, err
@@ -1260,6 +1263,8 @@ func (s *AWSCloud) getSelfAWSInstance() (*awsInstance, error) {
 		}
 
 		fmt.Println("DNSName from metadata service: ", privateDnsNameBytes)
+		fmt.Println("EC2 Instance: ", s.ec2)
+		fmt.Println("EC2 Instance: ", s.ec2)
 
 		i = newAWSInstance(s.ec2, string(instanceIdBytes), string(privateDnsNameBytes))
 		s.selfAWSInstance = i
