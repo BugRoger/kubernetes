@@ -97,6 +97,7 @@ func InitCloudProvider(name string, configFilePath string) Interface {
 	}
 
 	glog.Info("Initialized Cloud Provider")
+	glog.Info(cloud.Instances)
 
 	return cloud
 }
