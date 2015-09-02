@@ -1016,6 +1016,8 @@ func (self *awsInstance) getInfo() (*ec2.Instance, error) {
 		InstanceIDs: []*string{&instanceID},
 	}
 
+	fmt.Println("Fethching info for ", instanceID)
+
 	instances, err := self.ec2.DescribeInstances(request)
 	if err != nil {
 		return nil, err
