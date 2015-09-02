@@ -288,6 +288,8 @@ func (s *KubeletServer) Run(_ []string) error {
 		DockerFreeDiskMB: s.LowDiskSpaceThresholdMB,
 		RootFreeDiskMB:   s.LowDiskSpaceThresholdMB,
 	}
+	glog.V(2).Infof("Trying to initialize cloud provider: %q from the config file: %q\n", s.CloudProvider, s.CloudConfigFile)
+	
 	cloud := cloudprovider.InitCloudProvider(s.CloudProvider, s.CloudConfigFile)
 	glog.V(2).Infof("Successfully initialized cloud provider: %q from the config file: %q\n", s.CloudProvider, s.CloudConfigFile)
 
