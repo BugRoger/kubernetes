@@ -71,8 +71,6 @@ type VolumePlugin interface {
 	// - podUID: The UID of the enclosing pod
 	NewCleaner(name string, podUID types.UID, mounter mount.Interface) (Cleaner, error)
 
-	//Get cloud provider from kubelet
-	GetCloudProvider() cloudprovider.Interface
 }
 
 // PersistentVolumePlugin is an extended interface of VolumePlugin and is used
@@ -125,6 +123,9 @@ type VolumeHost interface {
 	// the provided spec.  See comments on NewWrapperBuilder for more
 	// context.
 	NewWrapperCleaner(spec *Spec, podUID types.UID, mounter mount.Interface) (Cleaner, error)
+
+	//Get cloud provider from kubelet
+	GetCloudProvider() cloudprovider.Interface
 }
 
 // VolumePluginMgr tracks registered plugins.
