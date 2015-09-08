@@ -24,6 +24,7 @@ import (
 	"github.com/golang/glog"
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/client"
+	"k8s.io/kubernetes/pkg/cloudprovider"
 	"k8s.io/kubernetes/pkg/types"
 	"k8s.io/kubernetes/pkg/util"
 	"k8s.io/kubernetes/pkg/util/errors"
@@ -69,6 +70,9 @@ type VolumePlugin interface {
 	// - name: The volume name, as per the api.Volume spec.
 	// - podUID: The UID of the enclosing pod
 	NewCleaner(name string, podUID types.UID, mounter mount.Interface) (Cleaner, error)
+
+	//Get cloud provider from kubelet
+	GetCloudProvider() cloudprovider.Interface
 }
 
 // PersistentVolumePlugin is an extended interface of VolumePlugin and is used
