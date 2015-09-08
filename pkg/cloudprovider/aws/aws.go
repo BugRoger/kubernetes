@@ -472,6 +472,7 @@ func init() {
 			[]credentials.Provider{
 				&credentials.EnvProvider{},
 				&credentials.EC2RoleProvider{},
+				&credentials.SharedCredentialsProvider{},
 			})
 		aws := &awsSDKProvider{creds: creds}
 		return newAWSCloud(config, aws)
