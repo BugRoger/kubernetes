@@ -736,31 +736,9 @@ func (kl *Kubelet) initialNodeStatus() (*api.Node, error) {
 			Labels: map[string]string{"kubernetes.io/hostname": kl.hostname},
 		},
 	}
-	if kl.cloud != nil {
-		instances, ok := kl.cloud.Instances()
-		if !ok {
-			return nil, fmt.Errorf("failed to get instances from cloud provider")
-		}
+	
+	node.Spec.ExternalID = kl.hostname
 
-		// TODO(roberthbailey): Can we do this without having credentials to talk
-		// to the cloud provider?
-		// TODO: ExternalID is deprecated, we'll have to drop this code
-		externalID, err := instances.ExternalID(kl.nodeName)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get external ID from cloud provider: %v", err)
-		}
-		node.Spec.ExternalID = externalID
-
-		// TODO: We can't assume that the node has credentials to talk to the
-		// cloudprovider from arbitrary nodes. At most, we should talk to a
-		// local metadata server here.
-		node.Spec.ProviderID, err = cloudprovider.GetInstanceProviderID(kl.cloud, kl.nodeName)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		node.Spec.ExternalID = kl.hostname
-	}
 	if err := kl.setNodeStatus(node); err != nil {
 		return nil, err
 	}
@@ -1973,20 +1951,7 @@ func (kl *Kubelet) syncNetworkStatus() {
 // any fields that are currently set.
 func (kl *Kubelet) setNodeStatus(node *api.Node) error {
 	// Set addresses for the node.
-	if kl.cloud != nil {
-		instances, ok := kl.cloud.Instances()
-		if !ok {
-			return fmt.Errorf("failed to get instances from cloud provider")
-		}
-		// TODO(roberthbailey): Can we do this without having credentials to talk
-		// to the cloud provider?
-		// TODO(justinsb): We can if CurrentNodeName() was actually CurrentNode() and returned an interface
-		nodeAddresses, err := instances.NodeAddresses(kl.nodeName)
-		if err != nil {
-			return fmt.Errorf("failed to get node address from cloud provider: %v", err)
-		}
-		node.Status.Addresses = nodeAddresses
-	} else {
+
 		addr := net.ParseIP(kl.hostname)
 		if addr != nil {
 			node.Status.Addresses = []api.NodeAddress{{Type: api.NodeLegacyHostIP, Address: addr.String()}}
@@ -1999,7 +1964,6 @@ func (kl *Kubelet) setNodeStatus(node *api.Node) error {
 			} else {
 				node.Status.Addresses = []api.NodeAddress{{Type: api.NodeLegacyHostIP, Address: addrs[0].String()}}
 			}
-		}
 	}
 
 	// TODO: Post NotReady if we cannot get MachineInfo from cAdvisor. This needs to start
