@@ -153,8 +153,8 @@ func TestSafeFormatAndMount(t *testing.T) {
 			}
 
 			// Check that something was mounted on the directory
-			isNotMountPoint, err := fakeMounter.IsLikelyNotMountPoint(dest)
-			if err != nil || isNotMountPoint {
+			isMountPoint, err := fakeMounter.IsMountPoint(dest)
+			if err != nil || !isMountPoint {
 				t.Errorf("the directory was not mounted")
 			}
 
