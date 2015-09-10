@@ -17,6 +17,9 @@
 FROM kube-build:cross
 MAINTAINER  Joe Beda <jbeda@google.com>
 
+ENV http_proxy http://proxy.wdf.sap.corp:8080
+ENV https_proxy http://proxy.wdf.sap.corp:8080
+
 # (set an explicit GOARM of 5 for maximum compatibility)
 ENV GOARM 5
 ENV GOOS    linux

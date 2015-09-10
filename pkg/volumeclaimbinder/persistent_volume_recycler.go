@@ -23,6 +23,7 @@ import (
 	"k8s.io/kubernetes/pkg/api"
 	"k8s.io/kubernetes/pkg/client"
 	"k8s.io/kubernetes/pkg/client/cache"
+	"k8s.io/kubernetes/pkg/cloudprovider"
 	"k8s.io/kubernetes/pkg/controller/framework"
 	"k8s.io/kubernetes/pkg/fields"
 	"k8s.io/kubernetes/pkg/labels"
@@ -83,6 +84,10 @@ func NewPersistentVolumeRecycler(kubeClient client.Interface, syncPeriod time.Du
 
 	recycler.volumeController = volumeController
 	return recycler, nil
+}
+
+func (f *PersistentVolumeRecycler) GetCloudProvider() cloudprovider.Interface {
+	return nil
 }
 
 func (recycler *PersistentVolumeRecycler) reclaimVolume(pv *api.PersistentVolume) error {
