@@ -1192,7 +1192,7 @@ func (self *awsDisk) getInfo() (*ec2.Volume, error) {
 func (self *awsDisk) waitForAttachmentStatus(status string) error {
 	// TODO: There may be a faster way to get this when we're attaching locally
 	attempt := 0
-	maxAttempts := 60
+	maxAttempts := 1800
 
 	for {
 		info, err := self.getInfo()
@@ -1221,7 +1221,7 @@ func (self *awsDisk) waitForAttachmentStatus(status string) error {
 			return nil
 		}
 
-		glog.V(2).Infof("Waiting for volume state: actual=%s, desired=%s", attachmentStatus, status)
+		glog.Infof("Waiting for volume state: actual=%s, desired=%s", attachmentStatus, status)
 
 		attempt++
 		if attempt > maxAttempts {
@@ -1325,15 +1325,31 @@ func (aws *AWSCloud) AttachDisk(instanceName string, diskName string, readOnly b
 	attached := false
 	defer func() {
 		if !attached {
-			awsInstance.releaseMountDevice(disk.awsID, ec2Device)
+			awsInstance.releaseMountDevice(disk.awsID, mountpoint)
 		}
 	}()
 
 	if !alreadyAttached {
 		attachResponse, err := aws.ec2.AttachVolume(disk.awsID, awsInstance.awsID, ec2Device)
+
 		if err != nil {
-			// TODO: Check if the volume was concurrently attached?
-			return "", fmt.Errorf("Error attaching EBS volume: %v", err)
+			concurrentlyAttached := false
+
+			if reqerr, ok := err.(awserr.RequestFailure); ok {
+				if reqerr.Code() == "VolumeInUse" {
+					regex := fmt.Sprintf("Volume '%s' is already attached to instance '%s'", disk.awsID, awsInstance.awsID)
+					r, _ := regexp.Compile(regex)
+
+					if r.MatchString(reqerr.Message()) {
+						glog.Infof("Volume %v was concurrently attached", disk.awsID)
+						concurrentlyAttached = true
+					}
+				}
+			}
+
+			if !concurrentlyAttached {
+				return "", fmt.Errorf("Error attaching EBS volume: %v", err)
+			}
 		}
 
 		glog.V(2).Info("AttachVolume request returned %v", attachResponse)
@@ -1341,6 +1357,7 @@ func (aws *AWSCloud) AttachDisk(instanceName string, diskName string, readOnly b
 
 	err = disk.waitForAttachmentStatus("attached")
 	if err != nil {
+		awsInstance.deviceMappings = nil
 		return "", err
 	}
 
@@ -1392,6 +1409,7 @@ func (aws *AWSCloud) DetachDisk(instanceName string, diskName string) error {
 
 	err = disk.waitForAttachmentStatus("detached")
 	if err != nil {
+		awsInstance.deviceMappings = nil
 		return err
 	}
 
