@@ -586,6 +586,8 @@ type CinderVolumeSource struct {
 type CephFSVolumeSource struct {
 	// Required: Monitors is a collection of Ceph monitors
 	Monitors []string `json:"monitors"`
+	// Optional: Use as the mounted root, rather than the full Ceph tree, default is /
+	Subdir string `json:"subdir,omitempty"`
 	// Optional: User is the rados user name, default is admin
 	User string `json:"user,omitempty"`
 	// Optional: SecretFile is the path to key ring for User, default is /etc/ceph/user.secret

@@ -82,6 +82,7 @@ func autoconvert_api_CephFSVolumeSource_To_v1_CephFSVolumeSource(in *api.CephFSV
 	} else {
 		out.Monitors = nil
 	}
+	out.Subdir = in.Subdir
 	out.User = in.User
 	out.SecretFile = in.SecretFile
 	if in.SecretRef != nil {
@@ -1129,6 +1130,7 @@ func autoconvert_v1_CephFSVolumeSource_To_api_CephFSVolumeSource(in *v1.CephFSVo
 	} else {
 		out.Monitors = nil
 	}
+	out.Subdir = in.Subdir
 	out.User = in.User
 	out.SecretFile = in.SecretFile
 	if in.SecretRef != nil {

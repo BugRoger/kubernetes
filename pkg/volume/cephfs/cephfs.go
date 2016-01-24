@@ -91,6 +91,10 @@ func (plugin *cephfsPlugin) newBuilderInternal(spec *volume.Spec, podUID types.U
 	if id == "" {
 		id = "admin"
 	}
+	subdir := cephvs.Subdir
+	if subdir == "" {
+		subdir = "/"
+	}
 	secret_file := cephvs.SecretFile
 	if secret_file == "" {
 		secret_file = "/etc/ceph/" + id + ".secret"
@@ -101,6 +105,7 @@ func (plugin *cephfsPlugin) newBuilderInternal(spec *volume.Spec, podUID types.U
 			podUID:      podUID,
 			volName:     spec.Name(),
 			mon:         cephvs.Monitors,
+			subdir:      subdir,
 			secret:      secret,
 			id:          id,
 			secret_file: secret_file,
@@ -137,6 +142,7 @@ type cephfs struct {
 	volName     string
 	podUID      types.UID
 	mon         []string
+	subdir      string
 	id          string
 	secret      string
 	secret_file string
@@ -255,7 +261,7 @@ func (cephfsVolume *cephfs) execMount(mountpoint string) error {
 	for i = 0; i < l-1; i++ {
 		src += hosts[i] + ","
 	}
-	src += hosts[i] + ":/"
+	src += hosts[i] + ":" + cephfsVolume.subdir
 
 	if err := cephfsVolume.mounter.Mount(src, mountpoint, "ceph", opt); err != nil {
 		return fmt.Errorf("CephFS: mount failed: %v", err)
